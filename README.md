@@ -8,6 +8,12 @@ Install development dependencies:
 npm install
 ```
 
+Run development server:
+
+```shell
+npm run serve
+```
+
 Fix lint and format errors:
 
 ```shell
