@@ -1,100 +1,6 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
 // SPDX-License-Identifier: MIT
 
-class BaseButton extends HTMLButtonElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.addEventListener("click", this.clicked);
-  }
-
-  clicked() {
-    throw new Error("Not implemented");
-  }
-
-  reset() {
-    throw new Error("Not implemented");
-  }
-}
-
-class BaseInput extends HTMLInputElement {
-  label;
-
-  constructor() {
-    super();
-    if (this.labels.length > 0) {
-      this.label = this.labels[0];
-    }
-  }
-
-  connectedCallback() {
-    this.addEventListener("input", this.valueChanged);
-  }
-
-  valueChanged() {
-    throw new Error("Not implemented");
-  }
-}
-
-class LengthInput extends BaseInput {
-  #defaultValue = 15;
-
-  constructor() {
-    super();
-    this.value = this.#defaultValue;
-    this.valueChanged();
-  }
-
-  valueChanged() {
-    const newText = this.label.innerText.replace(/\d+/, this.value);
-    this.label.innerText = newText;
-  }
-}
-
-class CopyButton extends BaseButton {
-  connectedCallback() {
-    super.connectedCallback();
-    document
-      .getElementById("generate")
-      ?.addEventListener("click", () => this.reset());
-    document
-      .getElementById("length")
-      ?.addEventListener("input", () => this.reset());
-  }
-
-  clicked() {
-    const password = document.getElementById("password").innerHTML;
-    navigator.clipboard.writeText(password);
-    this.innerText = "Copied";
-    this.classList.add("btn-success");
-  }
-
-  reset() {
-    this.innerText = "Copy";
-    this.classList.remove("btn-success");
-  }
-}
-
-class GenerateButton extends BaseButton {
-  connectedCallback() {
-    super.connectedCallback();
-    document
-      .getElementById("length")
-      ?.addEventListener("input", () => this.clicked());
-    this.click();
-  }
-
-  clicked() {
-    const validPasswordChars = getCharacters("DLU");
-    const length = document.getElementById("length")?.value;
-    const password = generatePassword(length, validPasswordChars);
-
-    document.getElementById("password").innerHTML = password;
-  }
-}
-
 /**
  * Create a random password from the specified characters.
  * @param {number} length
@@ -142,6 +48,38 @@ function getCharacters(charSets) {
   return chars;
 }
 
-customElements.define("copy-button", CopyButton, { extends: "button" });
-customElements.define("generate-button", GenerateButton, { extends: "button" });
-customElements.define("length-input", LengthInput, { extends: "input" });
+const copyButton = document.getElementById("copy");
+const generateButton = document.getElementById("generate");
+const passwordField = document.getElementById("password");
+const passwordLength = document.getElementById("length");
+
+copyButton.addEventListener("click", () => {
+  navigator.clipboard.writeText(passwordField.innerText);
+  copyButton.innerText = "Copied";
+  copyButton.classList.add("btn-success");
+});
+
+// Reset copy button when password changes.
+const passwordObserver = new MutationObserver(() => {
+  copyButton.innerText = "Copy";
+  copyButton.classList.remove("btn-success");
+});
+passwordObserver.observe(passwordField, {
+  characterData: true,
+  childList: true,
+});
+
+generateButton.addEventListener("click", () => {
+  const validPasswordChars = getCharacters("DLU");
+  const password = generatePassword(passwordLength.value, validPasswordChars);
+  passwordField.innerHTML = password;
+});
+
+// Generate new password when length changes.
+passwordLength.addEventListener("input", () => {
+  passwordLength.labels[0].innerText = `Characters: ${passwordLength.value}`;
+  generateButton.click();
+});
+
+// Generate on page load.
+generateButton.click();
