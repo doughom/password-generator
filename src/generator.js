@@ -22,6 +22,26 @@ function generatePassword(length, chars) {
 }
 
 /**
+ * Add color to digits in password.
+ * @param {string} password
+ * @returns {string} Password with span tags around digits.
+ */
+function colorPassword(password) {
+  let colorized = "";
+  const digit = new RegExp(/\d/);
+
+  for (const char of password) {
+    if (digit.test(char)) {
+      colorized = `${colorized}<span class="text-primary">${char}</span>`;
+    } else {
+      colorized = `${colorized}${char}`;
+    }
+  }
+
+  return colorized;
+}
+
+/**
  * Return the characters from the specified character set(s)
  *
  * Valid sets: (D)igits, (L)ower, and (U)pper
@@ -77,7 +97,9 @@ generateButton.addEventListener("click", () => {
   const lower = lowerSwitch.checked ? "L" : "";
   const upper = upperSwitch.checked ? "U" : "";
   const validPasswordChars = getCharacters(`${digit}${lower}${upper}`);
-  const password = generatePassword(passwordLength.value, validPasswordChars);
+
+  let password = generatePassword(passwordLength.value, validPasswordChars);
+  password = colorPassword(password);
   passwordField.innerHTML = password;
 });
 
