@@ -52,6 +52,9 @@ const copyButton = document.getElementById("copy");
 const generateButton = document.getElementById("generate");
 const passwordField = document.getElementById("password");
 const passwordLength = document.getElementById("length");
+const lowerSwitch = document.getElementById("lower");
+const upperSwitch = document.getElementById("upper");
+const digitSwitch = document.getElementById("digit");
 
 copyButton.addEventListener("click", () => {
   navigator.clipboard.writeText(passwordField.innerText);
@@ -70,7 +73,10 @@ passwordObserver.observe(passwordField, {
 });
 
 generateButton.addEventListener("click", () => {
-  const validPasswordChars = getCharacters("DLU");
+  const digit = digitSwitch.checked ? "D" : "";
+  const lower = lowerSwitch.checked ? "L" : "";
+  const upper = upperSwitch.checked ? "U" : "";
+  const validPasswordChars = getCharacters(`${digit}${lower}${upper}`);
   const password = generatePassword(passwordLength.value, validPasswordChars);
   passwordField.innerHTML = password;
 });
@@ -79,6 +85,13 @@ generateButton.addEventListener("click", () => {
 passwordLength.addEventListener("input", () => {
   passwordLength.labels[0].innerText = `Characters: ${passwordLength.value}`;
   generateButton.click();
+});
+
+// Generate new password when charset changes.
+[digitSwitch, lowerSwitch, upperSwitch].forEach((toggle) => {
+  toggle.addEventListener("change", () => {
+    generateButton.click();
+  });
 });
 
 // Generate on page load.
