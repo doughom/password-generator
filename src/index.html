@@ -21,22 +21,30 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
-          <button id="copy" type="button" class="btn btn-secondary w-100">
+          <button
+            is="copy-button"
+            type="button"
+            class="btn btn-secondary w-100"
+          >
             Copy
           </button>
         </div>
         <div class="col">
-          <button id="generate" type="button" class="btn btn-primary w-100">
+          <button
+            is="generate-button"
+            id="generate"
+            type="button"
+            class="btn btn-primary w-100"
+          >
             Generate
           </button>
         </div>
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label id="length-label" for="length" class="form-label"
-            >Characters</label
-          >
+          <label for="length" class="form-label">Characters: 0</label>
           <input
+            is="length-input"
             id="length"
             type="range"
             class="form-range"

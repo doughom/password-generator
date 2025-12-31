@@ -1,49 +1,96 @@
-class CustomElement {
-  elem;
+// SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
+// SPDX-License-Identifier: MIT
 
-  constructor(id) {
-    this.elem = document.getElementById(id);
+class BaseButton extends HTMLButtonElement {
+  constructor() {
+    super();
   }
 
-  update() {}
-  reset() {}
-}
-
-class LengthSlider extends CustomElement {
-  defaultValue = 15;
-  label;
-
-  constructor(id) {
-    super(id);
-    this.label = document.getElementById(`${id}-label`);
-    this.elem.value = this.defaultValue;
-    this.update();
+  connectedCallback() {
+    this.addEventListener("click", this.clicked);
   }
 
-  update() {
-    this.label.innerHTML = `Characters: ${this.elem.value}`;
-  }
-}
-
-class CopyButton extends CustomElement {
-  update() {
-    const password = document.getElementById("password").innerHTML;
-    navigator.clipboard.writeText(password);
-    this.elem.innerHTML = "Copied";
-    this.elem.classList.add("btn-success");
+  clicked() {
+    throw new Error("Not implemented");
   }
 
   reset() {
-    this.elem.innerHTML = "Copy";
-    this.elem.classList.remove("btn-success");
+    throw new Error("Not implemented");
   }
 }
 
-class GenerateButton extends CustomElement {
-  update() {
-    const chars = getCharacters("DLU");
-    const numChars = document.getElementById("length");
-    const password = generatePassword(numChars.value, chars);
+class BaseInput extends HTMLInputElement {
+  label;
+
+  constructor() {
+    super();
+    if (this.labels.length > 0) {
+      this.label = this.labels[0];
+    }
+  }
+
+  connectedCallback() {
+    this.addEventListener("input", this.valueChanged);
+  }
+
+  valueChanged() {
+    throw new Error("Not implemented");
+  }
+}
+
+class LengthInput extends BaseInput {
+  #defaultValue = 15;
+
+  constructor() {
+    super();
+    this.value = this.#defaultValue;
+    this.valueChanged();
+  }
+
+  valueChanged() {
+    const newText = this.label.innerText.replace(/\d+/, this.value);
+    this.label.innerText = newText;
+  }
+}
+
+class CopyButton extends BaseButton {
+  connectedCallback() {
+    super.connectedCallback();
+    document
+      .getElementById("generate")
+      ?.addEventListener("click", () => this.reset());
+    document
+      .getElementById("length")
+      ?.addEventListener("input", () => this.reset());
+  }
+
+  clicked() {
+    const password = document.getElementById("password").innerHTML;
+    navigator.clipboard.writeText(password);
+    this.innerText = "Copied";
+    this.classList.add("btn-success");
+  }
+
+  reset() {
+    this.innerText = "Copy";
+    this.classList.remove("btn-success");
+  }
+}
+
+class GenerateButton extends BaseButton {
+  connectedCallback() {
+    super.connectedCallback();
+    document
+      .getElementById("length")
+      ?.addEventListener("input", () => this.clicked());
+    this.click();
+  }
+
+  clicked() {
+    const validPasswordChars = getCharacters("DLU");
+    const length = document.getElementById("length")?.value;
+    const password = generatePassword(length, validPasswordChars);
+
     document.getElementById("password").innerHTML = password;
   }
 }
@@ -95,21 +142,6 @@ function getCharacters(charSets) {
   return chars;
 }
 
-const copy = new CopyButton("copy");
-copy.elem.addEventListener("click", () => {
-  copy.update();
-});
-
-const slider = new LengthSlider("length");
-slider.elem.addEventListener("input", () => {
-  slider.update();
-  generate.elem.click();
-});
-
-const generate = new GenerateButton("generate");
-generate.elem.addEventListener("click", () => {
-  generate.update();
-  copy.reset();
-});
-
-generate.elem.click();
+customElements.define("copy-button", CopyButton, { extends: "button" });
+customElements.define("generate-button", GenerateButton, { extends: "button" });
+customElements.define("length-input", LengthInput, { extends: "input" });
