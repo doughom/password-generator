@@ -17,17 +17,35 @@
         <h1>Password Generator</h1>
       </div>
       <div class="row">
-        <div class="fs-2 font-monospace text-break">
-          0OB85S1Il!G60OB85S1Il!G60OB85S1Il!G6
-        </div>
+        <div id="password" class="fs-2 font-monospace text-break"></div>
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
-          <button type="button" class="btn btn-secondary w-100">Copy</button>
+          <button id="copy" type="button" class="btn btn-secondary w-100">
+            Copy
+          </button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-primary w-100">Generate</button>
+          <button id="generate" type="button" class="btn btn-primary w-100">
+            Generate
+          </button>
         </div>
+      </div>
+      <div class="row mx-2 my-2">
+        <div class="col-6">
+          <label id="length-label" for="length" class="form-label"
+            >Characters</label
+          >
+          <input
+            id="length"
+            type="range"
+            class="form-range"
+            min="1"
+            max="32"
+            step="1"
+          />
+        </div>
+        <div class="col-6"><!-- Placeholder --></div>
       </div>
     </main>
     <script
