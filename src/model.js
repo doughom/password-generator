@@ -1,24 +1,16 @@
 class Model {
   password = "";
+  passwordhtml = "";
   length = 16;
   copied = false;
   lower = true;
   upper = true;
   digit = true;
-  event = document.createElement("changeEvent");
-
-  updateProp(propName, value) {
-    this[propName] = value;
-    console.log(`MODEL: updateProp ${propName} to ${this[propName]}`);
-    return this[propName];
-  }
 
   newPassword() {
-    let password = generatePassword(this.length, 7);
-    password = colorPassword(password);
-    this.password = password;
-    //const ev = new CustomEvent("propChanged", { detail: { prop: "password" } });
-    //this.event.dispatchEvent(ev);
+    this.password = generatePassword(this.length, 7);
+    this.passwordhtml = colorPassword(this.password);
+    this.copied = false;
   }
 }
 

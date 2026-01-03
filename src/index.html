@@ -19,14 +19,20 @@
       <div class="row mx-3">
         <span
           is="pg-span"
-          data-property="password"
-          data-password
+          data-passwordhtml
           class="fs-2 font-monospace text-break"
         ></span>
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
-          <button id="copy" type="button" class="btn btn-secondary w-100">
+          <button
+            is="pg-copy"
+            data-password
+            data-copied
+            id="copy"
+            type="button"
+            class="btn btn-secondary w-100"
+          >
             Copy
           </button>
         </div>
@@ -44,8 +50,7 @@
       <div class="row mx-2 my-2">
         <div class="col-6">
           <label for="length" class="form-label"
-            >Characters:
-            <span is="pg-span" data-property="length" data-length></span
+            >Characters: <span is="pg-span" data-length></span
           ></label>
           <input
             type="range"

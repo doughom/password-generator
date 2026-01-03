@@ -22,14 +22,20 @@ class Controller {
 
         const propName = attrName.replace("data-", "");
         const eventMap = {
+          button: "click",
           checkbox: "change",
           range: "input",
         };
 
         element.addEventListener(eventMap[element.type], () => {
-          model.updateProp(propName, element.value);
+          model[propName] = element.value;
         });
       });
+    });
+
+    const copyBtn = document.getElementById("copy");
+    copyBtn.addEventListener("click", () => {
+      model.copied = true;
     });
 
     const genBtn = document.getElementById("generate");
@@ -37,8 +43,9 @@ class Controller {
       model.newPassword();
     });
 
-    // Run setters on page load.
+    // Initial page load
     Object.assign(model, model);
+    model.newPassword();
   }
 }
 
