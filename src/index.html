@@ -33,7 +33,14 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label for="length" class="form-label">Characters: 16</label>
+          <label
+            is="gen-label"
+            data-name="Characters"
+            data-value="length"
+            data-length
+            for="length"
+            class="form-label"
+          ></label>
           <input
             id="length"
             type="range"
@@ -42,6 +49,7 @@
             max="64"
             step="1"
             value="16"
+            data-length
           />
         </div>
         <div class="col-6">
@@ -83,6 +91,6 @@
       integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
       crossorigin="anonymous"
     ></script>
-    <script src="generator.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>
