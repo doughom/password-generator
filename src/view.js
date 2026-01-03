@@ -1,19 +1,16 @@
 /**
- * Label element with innerText "Name: Value"
+ * Display the value of a model property.
  *
- * - data-name: name
- * - data-value: attribute name containing the value
+ * - data-property: name of property from the model
  */
-class GenLabel extends HTMLLabelElement {
+class CustomSpan extends HTMLSpanElement {
   connectedCallback() {
     observeAttributes(this);
   }
 
   render() {
-    const name = this.getAttribute("data-name");
-    const valueAttr = this.getAttribute("data-value");
-    const value = this.getAttribute(`data-${valueAttr}`);
-    this.innerText = `${name}: ${value}`;
+    const propName = this.getAttribute("data-property");
+    this.innerHTML = this.getAttribute(`data-${propName}`);
   }
 }
 
@@ -32,7 +29,7 @@ function observeAttributes(node) {
 
 class View {
   constructor() {
-    customElements.define("gen-label", GenLabel, { extends: "label" });
+    customElements.define("pg-span", CustomSpan, { extends: "span" });
   }
 }
 

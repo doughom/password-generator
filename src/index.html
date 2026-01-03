@@ -17,7 +17,12 @@
         <h1>Password Generator</h1>
       </div>
       <div class="row mx-3">
-        <div id="password" class="fs-2 font-monospace text-break"></div>
+        <span
+          is="pg-span"
+          data-property="password"
+          data-password
+          class="fs-2 font-monospace text-break"
+        ></span>
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
@@ -26,23 +31,23 @@
           </button>
         </div>
         <div class="col">
-          <button id="generate" type="button" class="btn btn-primary w-100">
+          <button
+            id="generate"
+            data-password
+            type="button"
+            class="btn btn-primary w-100"
+          >
             Generate
           </button>
         </div>
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label
-            is="gen-label"
-            data-name="Characters"
-            data-value="length"
-            data-length
-            for="length"
-            class="form-label"
+          <label for="length" class="form-label"
+            >Characters:
+            <span is="pg-span" data-property="length" data-length></span
           ></label>
           <input
-            id="length"
             type="range"
             class="form-range"
             min="8"
@@ -56,6 +61,7 @@
           <div class="form-check form-switch">
             <label class="form-check-label" for="lowercase">Lowercase</label>
             <input
+              data-lower
               class="form-check-input"
               type="checkbox"
               role="switch"

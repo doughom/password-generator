@@ -1,7 +1,5 @@
-import model from "./model.js";
-
 class Controller {
-  constructor() {
+  constructor(model) {
     // Update DOM on model property change
     const updateHtmlDataAttributes = {
       set(obj, prop, value) {
@@ -13,26 +11,34 @@ class Controller {
       },
     };
 
-    const modelProxy = new Proxy(model, updateHtmlDataAttributes);
+    model = new Proxy(model, updateHtmlDataAttributes);
 
     // Update model on user input
     document.querySelectorAll("input").forEach((element) => {
       element.getAttributeNames().forEach((attrName) => {
-        if (attrName.startsWith("data-")) {
-          attrName = attrName.replace("data-", "");
-          switch (element.type) {
-            case "range":
-              element.addEventListener("input", () => {
-                modelProxy[attrName] = element.value;
-              });
-              break;
-          }
+        if (!attrName.startsWith("data-")) {
+          return;
         }
+
+        const propName = attrName.replace("data-", "");
+        const eventMap = {
+          checkbox: "change",
+          range: "input",
+        };
+
+        element.addEventListener(eventMap[element.type], () => {
+          model.updateProp(propName, element.value);
+        });
       });
     });
 
+    const genBtn = document.getElementById("generate");
+    genBtn.addEventListener("click", () => {
+      model.newPassword();
+    });
+
     // Run setters on page load.
-    Object.assign(modelProxy, modelProxy);
+    Object.assign(model, model);
   }
 }
 
