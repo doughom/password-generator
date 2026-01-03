@@ -8,23 +8,34 @@ const charsets = {
 };
 
 /**
- * Create a random password from the specified characters.
+ * Create a random password with the given charset bitmask.
  * @param {number} length
- * @param {string} chars
+ * @param {number} charsetMask
  * @returns {string}
  */
-function generatePassword(length, chars) {
+function generatePassword(length, charsetMask) {
   let randomInts = new Uint32Array(length);
-  window.crypto.getRandomValues(randomInts);
-  randomInts = randomInts.map((i) => i % chars.length);
+  let chars = "";
 
-  let password = "";
+  for (let cs in charsets) {
+    if (charsetMask & charsets[cs].mask) {
+      chars = chars.concat(charsets[cs].chars);
+    }
+  }
 
-  randomInts.forEach((i) => {
-    password = password.concat(chars.charAt(i));
-  });
+  while (true) {
+    let password = "";
+    window.crypto.getRandomValues(randomInts);
+    randomInts = randomInts.map((i) => i % chars.length);
 
-  return password;
+    randomInts.forEach((i) => {
+      password = password.concat(chars.charAt(i));
+    });
+
+    if (getCharsetMask(password) == charsetMask) {
+      return password;
+    }
+  }
 }
 
 /**
@@ -48,22 +59,24 @@ function colorPassword(password) {
 }
 
 /**
- * Return the characters from the specified character set(s)
- *
- * Valid sets: lower (1), upper (2), digit (4)
- * @param {string} charsetMask bitmask of character set(s)
- * @returns {string}
+ * Returns the charset bitmask of the characters in the given password.
+ * @param {string} password
+ * @returns {number}
  */
-function getCharacters(charsetMask) {
-  let chars = "";
+function getCharsetMask(password) {
+  let mask = 0;
 
-  for (let cs in charsets) {
-    if (charsetMask & charsets[cs].mask) {
-      chars = chars.concat(charsets[cs].chars);
+  for (const char of password) {
+    if (/[a-z]/.test(char)) {
+      mask |= charsets.lower.mask;
+    } else if (/[A-Z]/.test(char)) {
+      mask |= charsets.upper.mask;
+    } else if (/\d/.test(char)) {
+      mask |= charsets.digit.mask;
     }
   }
 
-  return chars;
+  return mask;
 }
 
 const copyButton = document.getElementById("copy");
@@ -95,9 +108,8 @@ generateButton.addEventListener("click", () => {
   mask |= lowerSwitch.checked ? charsets.lower.mask : 0;
   mask |= upperSwitch.checked ? charsets.upper.mask : 0;
   mask |= digitSwitch.checked ? charsets.digit.mask : 0;
-  const validPasswordChars = getCharacters(mask);
 
-  let password = generatePassword(passwordLength.value, validPasswordChars);
+  let password = generatePassword(passwordLength.value, mask);
   password = colorPassword(password);
   passwordField.innerHTML = password;
 });
