@@ -1,24 +1,41 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
 // SPDX-License-Identifier: MIT
 
+const charsets = {
+  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1 },
+  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2 },
+  digit: { chars: "0123456789", mask: 4 },
+};
+
 /**
- * Create a random password from the specified characters.
+ * Create a random password with the given charset bitmask.
  * @param {number} length
- * @param {string} chars
+ * @param {number} charsetMask
  * @returns {string}
  */
-function generatePassword(length, chars) {
+function generatePassword(length, charsetMask) {
   let randomInts = new Uint32Array(length);
-  window.crypto.getRandomValues(randomInts);
-  randomInts = randomInts.map((i) => i % chars.length);
+  let chars = "";
 
-  let password = "";
+  for (let cs in charsets) {
+    if (charsetMask & charsets[cs].mask) {
+      chars = chars.concat(charsets[cs].chars);
+    }
+  }
 
-  randomInts.forEach((i) => {
-    password = password.concat(chars.charAt(i));
-  });
+  while (true) {
+    let password = "";
+    window.crypto.getRandomValues(randomInts);
+    randomInts = randomInts.map((i) => i % chars.length);
 
-  return password;
+    randomInts.forEach((i) => {
+      password = password.concat(chars.charAt(i));
+    });
+
+    if (getCharsetMask(password) == charsetMask) {
+      return password;
+    }
+  }
 }
 
 /**
@@ -42,30 +59,24 @@ function colorPassword(password) {
 }
 
 /**
- * Return the characters from the specified character set(s)
- *
- * Valid sets: (D)igits, (L)ower, and (U)pper
- * @param {string} charSets D, L, and/or U
- * @returns {string}
+ * Returns the charset bitmask of the characters in the given password.
+ * @param {string} password
+ * @returns {number}
  */
-function getCharacters(charSets) {
-  const lower = "abcdefghijklmnopqrstuvwxyz";
-  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const digit = "0123456789";
+function getCharsetMask(password) {
+  let mask = 0;
 
-  let chars = "";
-
-  if (charSets.includes("D")) {
-    chars = chars.concat(digit);
-  }
-  if (charSets.includes("L")) {
-    chars = chars.concat(lower);
-  }
-  if (charSets.includes("U")) {
-    chars = chars.concat(upper);
+  for (const char of password) {
+    if (/[a-z]/.test(char)) {
+      mask |= charsets.lower.mask;
+    } else if (/[A-Z]/.test(char)) {
+      mask |= charsets.upper.mask;
+    } else if (/\d/.test(char)) {
+      mask |= charsets.digit.mask;
+    }
   }
 
-  return chars;
+  return mask;
 }
 
 const copyButton = document.getElementById("copy");
@@ -93,12 +104,12 @@ passwordObserver.observe(passwordField, {
 });
 
 generateButton.addEventListener("click", () => {
-  const digit = digitSwitch.checked ? "D" : "";
-  const lower = lowerSwitch.checked ? "L" : "";
-  const upper = upperSwitch.checked ? "U" : "";
-  const validPasswordChars = getCharacters(`${digit}${lower}${upper}`);
+  let mask = 0;
+  mask |= lowerSwitch.checked ? charsets.lower.mask : 0;
+  mask |= upperSwitch.checked ? charsets.upper.mask : 0;
+  mask |= digitSwitch.checked ? charsets.digit.mask : 0;
 
-  let password = generatePassword(passwordLength.value, validPasswordChars);
+  let password = generatePassword(passwordLength.value, mask);
   password = colorPassword(password);
   passwordField.innerHTML = password;
 });
