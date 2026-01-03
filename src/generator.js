@@ -1,6 +1,12 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
 // SPDX-License-Identifier: MIT
 
+const charsets = {
+  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1 },
+  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2 },
+  digit: { chars: "0123456789", mask: 4 },
+};
+
 /**
  * Create a random password from the specified characters.
  * @param {number} length
@@ -44,25 +50,17 @@ function colorPassword(password) {
 /**
  * Return the characters from the specified character set(s)
  *
- * Valid sets: (D)igits, (L)ower, and (U)pper
- * @param {string} charSets D, L, and/or U
+ * Valid sets: lower (1), upper (2), digit (4)
+ * @param {string} charsetMask bitmask of character set(s)
  * @returns {string}
  */
-function getCharacters(charSets) {
-  const lower = "abcdefghijklmnopqrstuvwxyz";
-  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const digit = "0123456789";
-
+function getCharacters(charsetMask) {
   let chars = "";
 
-  if (charSets.includes("D")) {
-    chars = chars.concat(digit);
-  }
-  if (charSets.includes("L")) {
-    chars = chars.concat(lower);
-  }
-  if (charSets.includes("U")) {
-    chars = chars.concat(upper);
+  for (let cs in charsets) {
+    if (charsetMask & charsets[cs].mask) {
+      chars = chars.concat(charsets[cs].chars);
+    }
   }
 
   return chars;
@@ -93,10 +91,11 @@ passwordObserver.observe(passwordField, {
 });
 
 generateButton.addEventListener("click", () => {
-  const digit = digitSwitch.checked ? "D" : "";
-  const lower = lowerSwitch.checked ? "L" : "";
-  const upper = upperSwitch.checked ? "U" : "";
-  const validPasswordChars = getCharacters(`${digit}${lower}${upper}`);
+  let mask = 0;
+  mask |= lowerSwitch.checked ? charsets.lower.mask : 0;
+  mask |= upperSwitch.checked ? charsets.upper.mask : 0;
+  mask |= digitSwitch.checked ? charsets.digit.mask : 0;
+  const validPasswordChars = getCharacters(mask);
 
   let password = generatePassword(passwordLength.value, validPasswordChars);
   password = colorPassword(password);
