@@ -1,15 +1,27 @@
 class Model {
+  #length = 16;
+  get length() {
+    return this.#length;
+  }
+  set length(value) {
+    this.#length = value;
+    this.newPassword();
+  }
+
   password = "";
   passwordhtml = "";
-  length = 16;
   copied = false;
+
   lower = true;
   upper = true;
   digit = true;
 
+  /** Set by controller so that HTML attributes can be updated */
+  proxy = undefined;
+
   newPassword() {
-    this.password = generatePassword(this.length, 7);
-    this.passwordhtml = colorPassword(this.password);
+    this.proxy.password = generatePassword(this.length, 7);
+    this.proxy.passwordhtml = colorPassword(this.password);
     this.copied = false;
   }
 }
