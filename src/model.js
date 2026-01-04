@@ -4,8 +4,9 @@ class Model {
     return this.#length;
   }
   set length(value) {
+    // Regenerate the password when the user changes the length.
     this.#length = value;
-    this.newPassword();
+    this.proxy.newPassword();
   }
 
   password = "";
@@ -16,11 +17,16 @@ class Model {
   upper = true;
   digit = true;
 
-  /** Set by controller so that HTML attributes can be updated */
+  /** Set by controller so that HTML attributes can be updated from this class. */
   proxy = undefined;
 
   newPassword() {
-    this.proxy.password = generatePassword(this.length, 7);
+    let mask = 0;
+    mask |= this.lower ? charsets.lower.mask : 0;
+    mask |= this.upper ? charsets.upper.mask : 0;
+    mask |= this.digit ? charsets.digit.mask : 0;
+
+    this.proxy.password = generatePassword(this.length, mask);
     this.proxy.passwordhtml = colorPassword(this.password);
     this.copied = false;
   }

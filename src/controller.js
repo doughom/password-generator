@@ -1,22 +1,24 @@
-import Model from "./model.js";
+import Model from "./model.js"; // eslint-disable-line no-unused-vars
 
 class Controller {
-  constructor(m) {
-    // Autocomplete helper
-    let model = new Model();
-    model = m;
-
+  /**
+   * @param {Model} model
+   */
+  constructor(model) {
     // Update DOM on model property change
     const updateHtmlDataAttributes = {
       get(obj, prop) {
         return obj[prop];
       },
+
       set(obj, prop, value) {
         obj[prop] = value;
         const attrName = `data-${prop}`;
+
         document.querySelectorAll(`[${attrName}]`).forEach((element) => {
           element.setAttribute(attrName, value);
         });
+
         return true;
       },
     };
@@ -24,7 +26,7 @@ class Controller {
     model = new Proxy(model, updateHtmlDataAttributes);
     model.proxy = model;
 
-    // Update model on user input
+    // Update model for input elements
     document.querySelectorAll("input").forEach((element) => {
       element.getAttributeNames().forEach((attrName) => {
         if (!attrName.startsWith("data-")) {
@@ -32,14 +34,19 @@ class Controller {
         }
 
         const propName = attrName.replace("data-", "");
-        const eventMap = {
-          button: "click",
-          checkbox: "change",
-          range: "input",
+        const type = {
+          checkbox: {
+            eventType: "change",
+            valueAttr: "checked",
+          },
+          range: {
+            eventType: "input",
+            valueAttr: "value",
+          },
         };
 
-        element.addEventListener(eventMap[element.type], () => {
-          model[propName] = element.value;
+        element.addEventListener(type[element.type].eventType, () => {
+          model[propName] = element[type[element.type].valueAttr];
         });
       });
     });

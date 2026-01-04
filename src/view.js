@@ -1,4 +1,14 @@
 /**
+ * Register custom HTML elements that display data from the model.
+ */
+class View {
+  constructor() {
+    customElements.define("pg-span", CustomSpan, { extends: "span" });
+    customElements.define("pg-copy", CopyButton, { extends: "button" });
+  }
+}
+
+/**
  * Display the value of a model property.
  *
  * Only use one data attribute on the element.
@@ -51,13 +61,6 @@ function observeAttributes(node) {
     });
   });
   observer.observe(node, { attributes: true });
-}
-
-class View {
-  constructor() {
-    customElements.define("pg-span", CustomSpan, { extends: "span" });
-    customElements.define("pg-copy", CopyButton, { extends: "button" });
-  }
 }
 
 export default View;
