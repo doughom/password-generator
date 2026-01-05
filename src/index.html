@@ -17,7 +17,9 @@
         <h1>Password Generator</h1>
       </div>
       <div class="row mx-3">
-        <div id="password" class="fs-2 font-monospace text-break"></div>
+        <div id="password" class="fs-2 font-monospace text-break">
+          <span is="pg-span" data-passwordhtml>&nbsp;</span>
+        </div>
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
@@ -38,7 +40,6 @@
           >
           <input
             data-key="length"
-            id="length"
             type="range"
             class="form-range"
             min="8"

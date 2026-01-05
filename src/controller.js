@@ -8,7 +8,31 @@ class Controller {
     const proxy = new Proxy(model, handler);
     model.proxy = proxy;
 
-    addInputEventHandlers(proxy);
+    // Input elements: update model on event
+    document.querySelectorAll("input[data-key]").forEach((el) => {
+      const type = {
+        checkbox: {
+          eventType: "change",
+          valueAttr: "checked",
+        },
+        range: {
+          eventType: "input",
+          valueAttr: "value",
+        },
+      };
+
+      el.addEventListener(type[el.type].eventType, () => {
+        model[el.dataset.key] = el[type[el.type].valueAttr];
+      });
+    });
+
+    const generateButton = document.getElementById("generate");
+    generateButton.addEventListener("click", () => {
+      model.newPassword();
+    });
+
+    // Initial page load
+    model.newPassword();
   }
 }
 
@@ -20,28 +44,5 @@ const handler = {
     return true;
   },
 };
-
-/**
- * Update the model property given by data-key.
- * @param {Model} model
- */
-function addInputEventHandlers(model) {
-  document.querySelectorAll("input[data-key]").forEach((el) => {
-    const type = {
-      checkbox: {
-        eventType: "change",
-        valueAttr: "checked",
-      },
-      range: {
-        eventType: "input",
-        valueAttr: "value",
-      },
-    };
-
-    el.addEventListener(type[el.type].eventType, () => {
-      model[el.dataset.key] = el[type[el.type].valueAttr];
-    });
-  });
-}
 
 export default Controller;
