@@ -1,6 +1,7 @@
 class View {
   constructor() {
     customElements.define("pg-copy", CopyButton, { extends: "button" });
+    customElements.define("pg-charset", CharsetToggle, { extends: "input" });
     customElements.define("pg-span", CustomSpan, { extends: "span" });
   }
 }
@@ -34,6 +35,20 @@ class CopyButton extends HTMLButtonElement {
     } else {
       this.classList.remove("btn-success");
       this.innerText = "Copy";
+    }
+  }
+}
+
+class CharsetToggle extends HTMLInputElement {
+  static observedAttributes = ["data-value"];
+
+  attributeChangedCallback() {
+    // Prevent user from disabling the remaining enabled charset.
+    const numCharsetsEnabled = this.dataset.value;
+    if (numCharsetsEnabled == 1 && this.checked) {
+      this.setAttribute("disabled", true);
+    } else {
+      this.removeAttribute("disabled");
     }
   }
 }

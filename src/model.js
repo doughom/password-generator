@@ -2,6 +2,9 @@ class Model {
   /** Allows controller to intercept set operations. */
   proxy = null;
 
+  /** Number of enabled charsets. */
+  charsetsEnabled = 0;
+
   password = "";
   passwordHtml = "";
 
@@ -23,6 +26,36 @@ class Model {
     navigator.clipboard.writeText(this.password);
   }
 
+  constructor() {
+    /**
+     * Charset getters and setters
+     *
+     * Each charset can be enabled or disabled. When that happens:
+     * - Update charsetsEnabled (number of enabled charsets)
+     * - Generate a new password
+     */
+
+    for (const charset in charsets) {
+      Object.defineProperty(this, `_${charset}`, {
+        value: charsets[charset].default,
+        writable: true,
+      });
+      Object.defineProperty(this, charset, {
+        get: function () {
+          return this[`_${charset}`];
+        },
+        set: function (value) {
+          this[`_${charset}`] = value;
+          this._set(
+            "charsetsEnabled",
+            Object.keys(charsets).filter((cs) => this[cs]).length,
+          );
+          this.newPassword();
+        },
+      });
+    }
+  }
+
   /**
    * Set property using proxy if available.
    * @param {string} prop
@@ -37,7 +70,13 @@ class Model {
   }
 
   newPassword() {
-    const password = generatePassword(this.length, 7);
+    let mask = 0;
+    ["lower", "upper", "digit"].forEach((cs) => {
+      mask |= this[cs] ? charsets[cs].mask : 0;
+    });
+
+    const password = generatePassword(this.length, mask);
+
     this._set("password", password);
     this._set("passwordHtml", colorPassword(password));
     this._set("copy", false);
@@ -45,9 +84,9 @@ class Model {
 }
 
 const charsets = {
-  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1 },
-  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2 },
-  digit: { chars: "0123456789", mask: 4 },
+  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1, default: true },
+  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2, default: true },
+  digit: { chars: "0123456789", mask: 4, default: true },
 };
 
 /**
