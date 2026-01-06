@@ -5,10 +5,21 @@ class Controller {
    * @param {Model} model
    */
   constructor(model) {
-    const proxy = new Proxy(model, handler);
+    // On model property change, update HTML
+    const updateHtmlAttributes = {
+      set(obj, prop, value) {
+        obj[prop] = value;
+        document.querySelectorAll(`[data-${prop}]`).forEach((el) => {
+          el.dataset.value = value;
+        });
+        return true;
+      },
+    };
+    const proxy = new Proxy(model, updateHtmlAttributes);
     model.proxy = proxy;
+    model = proxy;
 
-    // Input elements: update model on event
+    // On input event, update model
     document.querySelectorAll("input[data-key]").forEach((el) => {
       const type = {
         checkbox: {
@@ -31,18 +42,15 @@ class Controller {
       model.newPassword();
     });
 
+    const copyButton = document.getElementById("copy");
+    copyButton.addEventListener("click", () => {
+      model.copy = true;
+    });
+
     // Initial page load
+    model.length = 16;
     model.newPassword();
   }
 }
-
-const handler = {
-  set(obj, prop, value) {
-    document.querySelectorAll(`[data-${prop}]`).forEach((el) => {
-      el.dataset.value = value;
-    });
-    return true;
-  },
-};
 
 export default Controller;

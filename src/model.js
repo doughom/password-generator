@@ -1,19 +1,34 @@
 class Model {
+  /** Allows controller to intercept set operations. */
   proxy = null;
 
   password = "";
   passwordHtml = "";
 
-  #length = 16;
+  _length = 16;
   get length() {
-    return this.#length;
+    return this._length;
   }
   set length(value) {
-    this.#length = value;
+    this._length = value;
     this.newPassword();
   }
 
-  #set(prop, value) {
+  _copy = false;
+  get copy() {
+    return this._copy;
+  }
+  set copy(value) {
+    this._copy = value;
+    navigator.clipboard.writeText(this.password);
+  }
+
+  /**
+   * Set property using proxy if available.
+   * @param {string} prop
+   * @param {*} value
+   */
+  _set(prop, value) {
     if (this.proxy === null) {
       this[prop] = value;
     } else {
@@ -22,9 +37,10 @@ class Model {
   }
 
   newPassword() {
-    const password = generatePassword(this.#length, 7);
-    this.#set("password", password);
-    this.#set("passwordHtml", colorPassword(password));
+    const password = generatePassword(this.length, 7);
+    this._set("password", password);
+    this._set("passwordHtml", colorPassword(password));
+    this._set("copy", false);
   }
 }
 
