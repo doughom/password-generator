@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Password Generator</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <script type="module" src="app.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+      integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body class="min-vh-100 d-flex align-items-center">
     <main class="container-md text-center" style="max-width: 720px">
@@ -17,11 +24,19 @@
         <h1>Password Generator</h1>
       </div>
       <div class="row mx-3">
-        <div id="password" class="fs-2 font-monospace text-break"></div>
+        <div class="fs-2 font-monospace text-break">
+          <span is="pg-password" data-password>&nbsp;</span>
+        </div>
       </div>
       <div class="row mx-2 my-2">
         <div class="col">
-          <button id="copy" type="button" class="btn btn-secondary w-100">
+          <button
+            is="pg-copy"
+            data-copy
+            id="copy"
+            type="button"
+            class="btn btn-secondary w-100"
+          >
             Copy
           </button>
         </div>
@@ -33,9 +48,11 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label for="length" class="form-label">Characters: 16</label>
+          <label for="length" class="form-label"
+            >Characters: <span is="pg-span" data-length>16</span></label
+          >
           <input
-            id="length"
+            data-key="length"
             type="range"
             class="form-range"
             min="8"
@@ -48,41 +65,41 @@
           <div class="form-check form-switch">
             <label class="form-check-label" for="lowercase">Lowercase</label>
             <input
+              is="pg-charset"
+              data-charsetsenabled
+              data-key="lower"
               class="form-check-input"
               type="checkbox"
               role="switch"
-              id="lower"
               checked
             />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="uppercase">Uppercase</label>
             <input
+              is="pg-charset"
+              data-key="upper"
+              data-charsetsenabled
               class="form-check-input"
               type="checkbox"
               role="switch"
-              id="upper"
               checked
             />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="digit">Digits</label>
             <input
+              is="pg-charset"
+              data-key="digit"
+              data-charsetsenabled
               class="form-check-input"
               type="checkbox"
               role="switch"
-              id="digit"
               checked
             />
           </div>
         </div>
       </div>
     </main>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
-      integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
-      crossorigin="anonymous"
-    ></script>
-    <script src="generator.js"></script>
   </body>
 </html>
