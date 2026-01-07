@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
 // SPDX-License-Identifier: MIT
 
+/**
+ * Use bitwise OR on the masks to determine which charsets are enabled.
+ */
 const charsets = {
   lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1 },
   upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2 },
@@ -11,7 +14,6 @@ class Model {
   #proxy = null;
   charsetsEnabled = 0;
   password = "";
-  passwordHtml = "";
 
   _length = 16;
   get length() {
@@ -43,8 +45,8 @@ class Model {
      * - Generate a new password
      */
     for (const charset in charsets) {
-      // Backing field.
-      Object.defineProperty(this, `_${charset}`, {
+      const backingFieldName = `_${charset}`;
+      Object.defineProperty(this, backingFieldName, {
         value: true,
         writable: true,
       });
@@ -52,11 +54,11 @@ class Model {
       // Getter and setter.
       Object.defineProperty(this, charset, {
         get: function () {
-          return this[`_${charset}`];
+          return this[backingFieldName];
         },
 
         set: function (value) {
-          this[`_${charset}`] = value;
+          this[backingFieldName] = value;
           this.charsetsEnabled = Object.keys(charsets).filter(
             (cs) => this[cs],
           ).length;
@@ -82,7 +84,6 @@ class Model {
     });
 
     this.password = generatePassword(this.length, mask);
-    this.passwordHtml = colorPassword(this.password);
     this.copy = false;
   }
 }
@@ -127,36 +128,16 @@ function getCharsetMask(password) {
   let mask = 0;
 
   for (const char of password) {
-    if (/[a-z]/.test(char)) {
-      mask |= charsets.lower.mask;
-    } else if (/[A-Z]/.test(char)) {
-      mask |= charsets.upper.mask;
-    } else if (/\d/.test(char)) {
-      mask |= charsets.digit.mask;
+    for (const name in charsets) {
+      const charset = charsets[name];
+      if (charset.chars.includes(char)) {
+        mask |= charset.mask;
+        break;
+      }
     }
   }
 
   return mask;
-}
-
-/**
- * Add color to digits in password.
- * @param {string} password
- * @returns {string} Password with span tags around digits.
- */
-function colorPassword(password) {
-  let colorized = "";
-  const digit = new RegExp(/\d/);
-
-  for (const char of password) {
-    if (digit.test(char)) {
-      colorized = `${colorized}<span class="text-primary">${char}</span>`;
-    } else {
-      colorized = `${colorized}${char}`;
-    }
-  }
-
-  return colorized;
 }
 
 export default Model;

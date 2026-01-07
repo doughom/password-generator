@@ -7,7 +7,6 @@ import View from "./view.js";
 // On model property change, update data attributes in HTML.
 const updateHtmlAttributes = {
   set(obj, prop, value) {
-    obj[prop] = value;
     document.querySelectorAll(`[data-${prop}]`).forEach((el) => {
       el.dataset.value = value;
     });
