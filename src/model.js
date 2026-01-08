@@ -5,9 +5,10 @@
  * Use bitwise OR on the masks to determine which charsets are enabled.
  */
 const charsets = {
-  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1 },
-  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2 },
-  digit: { chars: "0123456789", mask: 4 },
+  lower: { chars: "abcdefghijklmnopqrstuvwxyz", mask: 1, default: true },
+  upper: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", mask: 2, default: true },
+  digit: { chars: "0123456789", mask: 4, default: true },
+  symbol: { chars: "!@#$%^&*", mask: 8, default: false },
 };
 
 class Model {
@@ -49,7 +50,7 @@ class Model {
     for (const charset in charsets) {
       const backingFieldName = `_${charset}`;
       Object.defineProperty(this, backingFieldName, {
-        value: true,
+        value: charsets[charset].default,
         writable: true,
       });
 

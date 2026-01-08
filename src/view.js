@@ -78,10 +78,13 @@ class CharsetToggle extends HTMLElement {
 function colorPassword(password) {
   let colorized = "";
   const digit = new RegExp(/\d/);
+  const symbol = new RegExp(/[^A-Za-z0-9]/);
 
   for (const char of password) {
     if (digit.test(char)) {
       colorized = `${colorized}<span class="text-primary">${char}</span>`;
+    } else if (symbol.test(char)) {
+      colorized = `${colorized}<span class="text-danger">${char}</span>`;
     } else {
       colorized = `${colorized}${char}`;
     }
