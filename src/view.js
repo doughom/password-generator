@@ -9,17 +9,17 @@
  */
 class View {
   constructor() {
-    customElements.define("pg-charset", CharsetToggle, { extends: "input" });
-    customElements.define("pg-copy", CopyButton, { extends: "button" });
-    customElements.define("pg-span", CustomSpan, { extends: "span" });
-    customElements.define("pg-password", Password, { extends: "span" });
+    customElements.define("pg-charset", CharsetToggle);
+    customElements.define("pg-copy", CopyButton);
+    customElements.define("pg-span", Span);
+    customElements.define("pg-password", Password);
   }
 }
 
 /**
  * Span innerHTML is set to data-value.
  */
-class CustomSpan extends HTMLSpanElement {
+class Span extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback(attrName, oldValue, newValue) {
@@ -30,23 +30,24 @@ class CustomSpan extends HTMLSpanElement {
   }
 }
 
-class Password extends CustomSpan {
+class Password extends Span {
   attributeChangedCallback(attrName, oldValue, newValue) {
     newValue = colorPassword(newValue);
     super.attributeChangedCallback(attrName, oldValue, newValue);
   }
 }
 
-class CopyButton extends HTMLButtonElement {
+class CopyButton extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback() {
+    const button = this.firstElementChild;
     if (this.dataset.value === "true") {
-      this.classList.add("btn-success");
-      this.innerText = "Copied";
+      button.classList.add("btn-success");
+      button.innerText = "Copied";
     } else {
-      this.classList.remove("btn-success");
-      this.innerText = "Copy";
+      button.classList.remove("btn-success");
+      button.innerText = "Copy";
     }
   }
 }
@@ -54,15 +55,17 @@ class CopyButton extends HTMLButtonElement {
 /**
  * Prevent the user from disabling the last remaining enabled charset.
  */
-class CharsetToggle extends HTMLInputElement {
+class CharsetToggle extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback() {
+    const input = this.firstElementChild;
     const numCharsetsEnabled = this.dataset.value;
-    if (numCharsetsEnabled == 1 && this.checked) {
-      this.setAttribute("disabled", true);
+
+    if (numCharsetsEnabled == 1 && input.checked) {
+      input.setAttribute("disabled", true);
     } else {
-      this.removeAttribute("disabled");
+      input.removeAttribute("disabled");
     }
   }
 }
