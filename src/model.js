@@ -30,7 +30,9 @@ class Model {
   }
   set copy(value) {
     this._copy = value;
-    navigator.clipboard?.writeText(this.password);
+    if (value) {
+      navigator.clipboard?.writeText(this.password);
+    }
   }
 
   /**
