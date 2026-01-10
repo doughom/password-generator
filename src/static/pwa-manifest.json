@@ -2,18 +2,18 @@
   "name": "Password Generator",
   "icons": [
     {
-      "src": "/192.png",
+      "src": "192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/512-mask.png",
+      "src": "512-mask.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     },
     {
-      "src": "/512.png",
+      "src": "512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
