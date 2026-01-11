@@ -7,10 +7,19 @@ import View from "./view.js";
 // On model property change, update data attributes in HTML.
 const updateHtmlAttributes = {
   set(obj, prop, value) {
+    const result = Reflect.set(...arguments);
+
+    // data-prop -> obj.prop
     document.querySelectorAll(`[data-${prop}]`).forEach((el) => {
       el.dataset.value = value;
     });
-    return Reflect.set(...arguments);
+
+    // watch-prop -> obj[data-key value]
+    document.querySelectorAll(`[watch-${prop}]`).forEach((el) => {
+      el.dataset.value = obj[el.dataset.key];
+    });
+
+    return result;
   },
 };
 

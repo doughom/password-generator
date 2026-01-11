@@ -25,6 +25,21 @@ class Model {
     this.newPassword();
   }
 
+  get mask() {
+    let mask = 0;
+    Object.keys(charsets).forEach((cs) => {
+      mask |= this[cs] ? charsets[cs].mask : 0;
+    });
+    return mask;
+  }
+
+  get entropy() {
+    const cardinality = getChars(this.mask).length;
+    const entropy = Math.log2(cardinality ** this.password.length);
+    console.log(this.password);
+    return Math.round(entropy);
+  }
+
   _copy = false;
   get copy() {
     return this._copy;
@@ -81,14 +96,26 @@ class Model {
   }
 
   newPassword() {
-    let mask = 0;
-    Object.keys(charsets).forEach((cs) => {
-      mask |= this[cs] ? charsets[cs].mask : 0;
-    });
-
-    this.password = generatePassword(this.length, mask);
+    this.password = generatePassword(this.length, this.mask);
     this.copy = false;
   }
+}
+
+/**
+ * Returns all possible characters with the given charset bitmask.
+ * @param {number} charsetMask
+ * @returns {string}
+ */
+function getChars(charsetMask) {
+  let chars = "";
+
+  for (let cs in charsets) {
+    if (charsetMask & charsets[cs].mask) {
+      chars += charsets[cs].chars;
+    }
+  }
+
+  return chars;
 }
 
 /**
@@ -99,13 +126,7 @@ class Model {
  */
 function generatePassword(length, charsetMask) {
   let randomInts = new Uint32Array(length);
-  let chars = "";
-
-  for (let cs in charsets) {
-    if (charsetMask & charsets[cs].mask) {
-      chars = chars.concat(charsets[cs].chars);
-    }
-  }
+  const chars = getChars(charsetMask);
 
   while (true) {
     let password = "";
@@ -113,7 +134,7 @@ function generatePassword(length, charsetMask) {
     randomInts = randomInts.map((i) => i % chars.length);
 
     randomInts.forEach((i) => {
-      password = password.concat(chars.charAt(i));
+      password += chars.charAt(i);
     });
 
     if (getCharsetMask(password) == charsetMask) {
