@@ -4,10 +4,21 @@
 import Model from "./model.js";
 import View from "./view.js";
 
+/**
+ * HTML data attributes faciliate communication between the view and the model.
+ *
+ * There are three special attributes:
+ * - data-input: used with input elements to update the model
+ * - data-watch: space separated list of model properties to observe
+ * - data-key: used with data-watch to read a specific model property
+ *
+ * Other data attributes are for simple use cases, such as a span that displays
+ * the value of one model property without any other logic.
+ */
+
 // On model property change...
 const updateHtmlDataAttributes = {
   set(obj, prop, value) {
-    console.log(`${prop} set to ${value}`);
     const result = Reflect.set(...arguments);
 
     // Update defined properties.
@@ -17,7 +28,7 @@ const updateHtmlDataAttributes = {
 
     // Update calculated properties.
     document
-      .querySelectorAll(`[data-key][data-watch="${prop}"]`)
+      .querySelectorAll(`[data-key][data-watch*=${prop}]`)
       .forEach((el) => {
         el.dataset.value = obj[el.dataset.key];
       });
@@ -67,7 +78,6 @@ document.querySelectorAll("input[data-input]").forEach((el) => {
   const valueAttr = inputValueMap[el.type].valueAttr;
 
   el.addEventListener(eventType, () => {
-    console.log("input detected");
     model[el.dataset.input] = el[valueAttr];
   });
 });

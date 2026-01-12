@@ -97,8 +97,6 @@ class BaseCheckbox extends HTMLElement {
       this.checkbox.checked = true;
     } else if (newValue === "false") {
       this.checkbox.checked = false;
-    } else {
-      console.log("something else");
     }
   }
 }
@@ -109,13 +107,11 @@ class CharsetCheckbox extends BaseCheckbox {
   // Prevent the user from disabling the last remaining enabled charset.
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(...arguments);
-
-    if (/\d+/.test(newValue)) {
-      console.log("found a number");
+    if (!/\d+/.test(newValue)) {
+      return;
     }
 
-    const numCharsetsEnabled = this.dataset.value;
-
+    const numCharsetsEnabled = newValue;
     if (numCharsetsEnabled == 1 && this.checkbox.checked) {
       this.checkbox.setAttribute("disabled", true);
     } else {

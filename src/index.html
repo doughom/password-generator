@@ -57,19 +57,35 @@
         <div class="col-6">
           <div class="form-check form-switch">
             <label class="form-check-label" for="lowercase">Lowercase</label>
-            <pg-charsetcheckbox data-input="lower" />
+            <pg-charsetcheckbox
+              data-input="lower"
+              data-watch="upper digit symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="uppercase">Uppercase</label>
-            <pg-charsetcheckbox data-input="upper" />
+            <pg-charsetcheckbox
+              data-input="upper"
+              data-watch="lower digit symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="digit">Digits</label>
-            <pg-charsetcheckbox data-input="digit" />
+            <pg-charsetcheckbox
+              data-input="digit"
+              data-watch="lower upper symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="symbol">Symbols</label>
-            <pg-charsetcheckbox data-input="symbol" data-symbol />
+            <pg-charsetcheckbox
+              data-input="symbol"
+              data-watch="lower upper digit"
+              data-key="charsetsEnabled"
+            />
           </div>
         </div>
       </div>

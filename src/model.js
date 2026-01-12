@@ -13,9 +13,7 @@ const charsets = {
 
 class Model {
   get charsetsEnabled() {
-    const count = Object.keys(charsets).filter((cs) => this[cs]).length;
-    console.log(`MODEL charsets enabled: ${count}`);
-    return count;
+    return Object.keys(charsets).filter((cs) => this[cs]).length;
   }
 
   password = "";
@@ -54,7 +52,8 @@ class Model {
         return result;
       },
     };
-    const controllerProxy = new Proxy(this, handler);
+
+    let controllerProxy = new Proxy(this, handler);
     return new Proxy(controllerProxy, refreshPassword);
   }
 
