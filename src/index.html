@@ -49,27 +49,27 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label for="length" class="form-label"
-            >Characters: <pg-span data-key="length"
-          /></label>
-          <pg-length data-key="length" />
+          <label for="length" class="form-label">
+            Characters: <pg-span data-length />
+          </label>
+          <pg-length data-input="length" />
         </div>
         <div class="col-6">
           <div class="form-check form-switch">
             <label class="form-check-label" for="lowercase">Lowercase</label>
-            <pg-charsetcheckbox data-key="lower" data-charsetsenabled />
+            <pg-charsetcheckbox data-input="lower" />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="uppercase">Uppercase</label>
-            <pg-charsetcheckbox data-key="upper" data-charsetsenabled />
+            <pg-charsetcheckbox data-input="upper" />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="digit">Digits</label>
-            <pg-charsetcheckbox data-key="digit" data-charsetsenabled />
+            <pg-charsetcheckbox data-input="digit" />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="symbol">Symbols</label>
-            <pg-charsetcheckbox data-key="symbol" data-charsetsenabled />
+            <pg-charsetcheckbox data-input="symbol" data-symbol />
           </div>
         </div>
       </div>

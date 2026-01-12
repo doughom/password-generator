@@ -13,7 +13,9 @@ const charsets = {
 
 class Model {
   get charsetsEnabled() {
-    return Object.keys(charsets).filter((cs) => this[cs]).length;
+    const count = Object.keys(charsets).filter((cs) => this[cs]).length;
+    console.log(`MODEL charsets enabled: ${count}`);
+    return count;
   }
 
   password = "";
