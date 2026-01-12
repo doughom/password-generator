@@ -10,9 +10,11 @@
 class View {
   constructor() {
     customElements.define("pg-charset", CharsetToggle);
+    customElements.define("pg-charsetcheckbox", CharsetCheckbox);
     customElements.define("pg-copy", CopyButton);
-    customElements.define("pg-span", Span);
     customElements.define("pg-password", Password);
+    customElements.define("pg-length", Length);
+    customElements.define("pg-span", Span);
   }
 }
 
@@ -23,9 +25,10 @@ class Span extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback(attrName, oldValue, newValue) {
+    // Move value inside the element.
     if (newValue != "" && newValue != undefined) {
       this.innerHTML = newValue;
-      this.setAttribute(attrName, "");
+      this.dataset.value = "";
     }
   }
 }
@@ -34,6 +37,79 @@ class Password extends Span {
   attributeChangedCallback(attrName, oldValue, newValue) {
     newValue = colorPassword(newValue);
     super.attributeChangedCallback(attrName, oldValue, newValue);
+  }
+}
+
+class Length extends HTMLElement {
+  #range;
+
+  constructor() {
+    super();
+    const attrs = {
+      id: "length",
+      type: "range",
+      min: 8,
+      max: 64,
+      step: 1,
+    };
+    this.#range = document.createElement("input");
+    Object.assign(this.#range, attrs);
+    this.#range.classList.add("form-range");
+  }
+
+  connectedCallback() {
+    // Move attributes into child element.
+    this.#range.value = this.dataset.value;
+    this.removeAttribute("data-value");
+
+    this.#range.dataset.key = this.dataset.key;
+    this.removeAttribute("data-key");
+
+    this.appendChild(this.#range);
+  }
+}
+
+class BaseCheckbox extends HTMLElement {
+  checkbox;
+
+  constructor() {
+    super();
+    const attrs = {
+      type: "checkbox",
+      role: "switch",
+    };
+
+    this.checkbox = document.createElement("input");
+    Object.assign(this.checkbox, attrs);
+    this.checkbox.classList.add("form-check-input");
+  }
+
+  connectedCallback() {
+    // Move attributes into child element.
+    this.checkbox.checked = this.dataset.value;
+    console.log(`${this.dataset.key} box is ${this.checkbox.checked}`);
+    this.removeAttribute("data-value");
+
+    this.checkbox.dataset.key = this.dataset.key;
+    this.removeAttribute("data-key");
+
+    this.appendChild(this.checkbox);
+  }
+}
+
+class CharsetCheckbox extends BaseCheckbox {
+  static observedAttributes = ["data-value"];
+
+  // Prevent the user from disabling the last remaining enabled charset.
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log("charsets enabled changed to" + newValue);
+    const numCharsetsEnabled = this.dataset.value;
+
+    if (numCharsetsEnabled == 1 && this.checkbox.checked) {
+      this.checkbox.setAttribute("disabled", true);
+    } else {
+      this.checkbox.removeAttribute("disabled");
+    }
   }
 }
 

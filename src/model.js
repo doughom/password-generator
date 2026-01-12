@@ -12,18 +12,17 @@ const charsets = {
 };
 
 class Model {
-  #proxy = null;
-  charsetsEnabled = 0;
-  password = "";
+  get charsetsEnabled() {
+    return Object.keys(charsets).filter((cs) => this[cs]).length;
+  }
 
-  _length = 16;
-  get length() {
-    return this._length;
-  }
-  set length(value) {
-    this._length = value;
-    this.newPassword();
-  }
+  password = "";
+  length = 16;
+
+  lower = true;
+  upper = true;
+  digit = true;
+  symbol = false;
 
   _copy = false;
   get copy() {
@@ -41,43 +40,20 @@ class Model {
    */
   constructor(handler) {
     /**
-     * Create charset getters, setters, and backing fields.
-     *
-     * Each charset can be enabled or disabled. When that happens:
-     * - Update charsetsEnabled (number of enabled charsets)
-     * - Generate a new password
+     * Changes to these properties will generate a new password.
      */
-    for (const charset in charsets) {
-      const backingFieldName = `_${charset}`;
-      Object.defineProperty(this, backingFieldName, {
-        value: charsets[charset].default,
-        writable: true,
-      });
-
-      // Getter and setter.
-      Object.defineProperty(this, charset, {
-        get: function () {
-          return this[backingFieldName];
-        },
-
-        set: function (value) {
-          this[backingFieldName] = value;
-          this.charsetsEnabled = Object.keys(charsets).filter(
-            (cs) => this[cs],
-          ).length;
-          this.newPassword();
-        },
-      });
-    }
-
-    this.charsetsEnabled = Object.keys(charsets).filter(
-      (cs) => this[cs],
-    ).length;
-
-    if (handler) {
-      this.#proxy = new Proxy(this, handler);
-      return this.#proxy;
-    }
+    const refreshPassword = {
+      set(obj, prop) {
+        const props = ["length", "lower", "upper", "digit", "symbol"];
+        const result = Reflect.set(...arguments);
+        if (props.includes(prop)) {
+          obj.newPassword();
+        }
+        return result;
+      },
+    };
+    const controllerProxy = new Proxy(this, handler);
+    return new Proxy(controllerProxy, refreshPassword);
   }
 
   newPassword() {
