@@ -55,6 +55,10 @@
           <div>
             Entropy:
             <pg-span data-watch="password" data-key="entropy"></pg-span> bits
+            <img
+              src="static/question.svg"
+              title="Measurement of resistance to password cracking."
+            />
           </div>
           <label for="length" class="form-label">
             Characters: <pg-span data-length></pg-span>
@@ -87,7 +91,9 @@
             />
           </div>
           <div class="form-check form-switch">
-            <label class="form-check-label" for="symbol">Symbols</label>
+            <label class="form-check-label" for="symbol"
+              >Symbols <img src="static/question.svg" title="Symbols: !@#$%^&*"
+            /></label>
             <pg-charsetcheckbox
               data-input="symbol"
               data-watch="lower upper digit"
@@ -95,7 +101,10 @@
             />
           </div>
           <div class="form-check form-switch">
-            <label class="form-check-label" for="symbol">Ambiguous</label>
+            <label class="form-check-label" for="symbol"
+              >Ambiguous
+              <img src="static/question.svg" title="Ambiguous: 0O1lI5S"
+            /></label>
             <pg-checkbox data-input="ambiguous" />
           </div>
         </div>
