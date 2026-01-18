@@ -52,8 +52,12 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
+          <div>
+            Entropy:
+            <pg-span data-watch="password" data-key="entropy"></pg-span> bits
+          </div>
           <label for="length" class="form-label">
-            Characters: <pg-span data-length />
+            Characters: <pg-span data-length></pg-span>
           </label>
           <pg-length data-input="length" />
         </div>

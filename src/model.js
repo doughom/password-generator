@@ -51,6 +51,11 @@ class Model {
     return chars;
   }
 
+  get entropy() {
+    const entropy = Math.log2(this.characters.length ** this.password.length);
+    return Math.round(entropy);
+  }
+
   _copy = false;
   get copy() {
     return this._copy;
