@@ -9,23 +9,22 @@
  */
 class View {
   constructor() {
-    customElements.define("pg-charset", CharsetToggle);
+    customElements.define("pg-charsetcheckbox", CharsetCheckbox);
     customElements.define("pg-copy", CopyButton);
-    customElements.define("pg-span", Span);
     customElements.define("pg-password", Password);
+    customElements.define("pg-length", Length);
+    customElements.define("pg-span", Span);
   }
 }
 
-/**
- * Span innerHTML is set to data-value.
- */
 class Span extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback(attrName, oldValue, newValue) {
+    // Move value inside the element.
     if (newValue != "" && newValue != undefined) {
       this.innerHTML = newValue;
-      this.setAttribute(attrName, "");
+      this.dataset.value = "";
     }
   }
 }
@@ -37,43 +36,109 @@ class Password extends Span {
   }
 }
 
+class Length extends HTMLElement {
+  #range;
+
+  constructor() {
+    super();
+    const attrs = {
+      id: "length",
+      type: "range",
+      min: 8,
+      max: 64,
+      step: 1,
+    };
+    this.#range = document.createElement("input");
+    Object.assign(this.#range, attrs);
+    this.#range.classList.add("form-range");
+  }
+
+  connectedCallback() {
+    // Move attributes into child element.
+    this.#range.value = this.dataset.value;
+    this.removeAttribute("data-value");
+
+    this.#range.dataset.input = this.dataset.input;
+    this.removeAttribute("data-input");
+
+    this.appendChild(this.#range);
+  }
+}
+
+class BaseCheckbox extends HTMLElement {
+  checkbox;
+
+  constructor() {
+    super();
+    const attrs = {
+      type: "checkbox",
+      role: "switch",
+    };
+
+    this.checkbox = document.createElement("input");
+    Object.assign(this.checkbox, attrs);
+    this.checkbox.classList.add("form-check-input");
+
+    // Copy data attribute to checkbox so it can update the model.
+    this.checkbox.dataset.input = this.dataset.input;
+  }
+
+  connectedCallback() {
+    this.appendChild(this.checkbox);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    // Boolean is only used during initialization.
+    if (newValue === "true") {
+      this.checkbox.checked = true;
+    } else if (newValue === "false") {
+      this.checkbox.checked = false;
+    }
+  }
+}
+
+class CharsetCheckbox extends BaseCheckbox {
+  static observedAttributes = ["data-value"];
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    super.attributeChangedCallback(...arguments);
+
+    // Value is boolean during initialization.
+    if (!/\d+/.test(newValue)) {
+      return;
+    }
+
+    // Prevent the user from disabling the last remaining enabled charset.
+    const numCharsetsEnabled = newValue;
+    if (numCharsetsEnabled == 1 && this.checkbox.checked) {
+      this.checkbox.setAttribute("disabled", true);
+    } else {
+      this.checkbox.removeAttribute("disabled");
+    }
+  }
+}
+
 class CopyButton extends HTMLElement {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback() {
     const button = this.firstElementChild;
+    const colorClass = "btn-success";
+
     if (this.dataset.value === "true") {
-      button.classList.add("btn-success");
+      button.classList.add(colorClass);
       button.innerText = "Copied";
     } else {
-      button.classList.remove("btn-success");
+      button.classList.remove(colorClass);
       button.innerText = "Copy";
     }
   }
 }
 
 /**
- * Prevent the user from disabling the last remaining enabled charset.
- */
-class CharsetToggle extends HTMLElement {
-  static observedAttributes = ["data-value"];
-
-  attributeChangedCallback() {
-    const input = this.firstElementChild;
-    const numCharsetsEnabled = this.dataset.value;
-
-    if (numCharsetsEnabled == 1 && input.checked) {
-      input.setAttribute("disabled", true);
-    } else {
-      input.removeAttribute("disabled");
-    }
-  }
-}
-
-/**
- * Add color to digits in password.
+ * Add color to password.
  * @param {string} password
- * @returns {string} Password with span tags around digits.
+ * @returns {string} Password with span tags around digits and symbols.
  */
 function colorPassword(password) {
   let colorized = "";
