@@ -49,66 +49,43 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
-          <label for="length" class="form-label"
-            >Characters: <pg-span data-length>16</pg-span></label
-          >
-          <input
-            data-key="length"
-            type="range"
-            class="form-range"
-            min="8"
-            max="64"
-            step="1"
-            value="16"
-          />
+          <label for="length" class="form-label">
+            Characters: <pg-span data-length />
+          </label>
+          <pg-length data-input="length" />
         </div>
         <div class="col-6">
           <div class="form-check form-switch">
             <label class="form-check-label" for="lowercase">Lowercase</label>
-            <pg-charset data-charsetsenabled>
-              <input
-                data-key="lower"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                checked
-              />
-            </pg-charset>
+            <pg-charsetcheckbox
+              data-input="lower"
+              data-watch="upper digit symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="uppercase">Uppercase</label>
-            <pg-charset data-charsetsenabled>
-              <input
-                data-key="upper"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                checked
-              />
-            </pg-charset>
+            <pg-charsetcheckbox
+              data-input="upper"
+              data-watch="lower digit symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="digit">Digits</label>
-            <pg-charset data-charsetsenabled>
-              <input
-                data-key="digit"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                checked
-              />
-            </pg-charset>
+            <pg-charsetcheckbox
+              data-input="digit"
+              data-watch="lower upper symbol"
+              data-key="charsetsEnabled"
+            />
           </div>
           <div class="form-check form-switch">
-            <label class="form-check-label" for="digit">Symbols</label>
-            <pg-charset data-charsetsenabled>
-              <input
-                data-key="symbol"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-              />
-            </pg-charset>
+            <label class="form-check-label" for="symbol">Symbols</label>
+            <pg-charsetcheckbox
+              data-input="symbol"
+              data-watch="lower upper digit"
+              data-key="charsetsEnabled"
+            />
           </div>
         </div>
       </div>
