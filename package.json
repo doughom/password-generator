@@ -10,11 +10,19 @@
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
     "prettier": "3.7.4",
-    "serve-static": "2.2.1"
+    "sass": "1.97.2",
+    "serve-static": "2.2.1",
+    "vite": "7.3.1"
   },
   "scripts": {
+    "build": "npx vite build",
     "format": "npx eslint --fix; npx prettier --write .",
     "prepare": "husky",
-    "serve": "node serve.cjs"
+    "preview": "npx vite preview",
+    "start": "npx vite"
+  },
+  "dependencies": {
+    "@popperjs/core": "2.11.8",
+    "bootstrap": "5.3.8"
   }
 }

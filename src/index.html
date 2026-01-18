@@ -4,19 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Password Generator</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
     <script type="module" src="app.js"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
-      integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
-      crossorigin="anonymous"
-    ></script>
     <link rel="icon" href="static/favicon.ico" sizes="32x32" />
     <link rel="icon" href="static/icon.svg" type="image/svg+xml" />
     <link rel="icon" sizes="180x180" href="static/180.png" />
@@ -58,6 +46,7 @@
             <img
               src="static/question.svg"
               title="Measurement of resistance to password cracking."
+              data-bs-toggle="tooltip"
             />
           </div>
           <label for="length" class="form-label">
@@ -92,7 +81,11 @@
           </div>
           <div class="form-check form-switch">
             <label class="form-check-label" for="symbol"
-              >Symbols <img src="static/question.svg" title="Symbols: !@#$%^&*"
+              >Symbols
+              <img
+                src="static/question.svg"
+                title="!@#$%^&*"
+                data-bs-toggle="tooltip"
             /></label>
             <pg-charsetcheckbox
               data-input="symbol"
@@ -103,7 +96,10 @@
           <div class="form-check form-switch">
             <label class="form-check-label" for="symbol"
               >Ambiguous
-              <img src="static/question.svg" title="Ambiguous: 0O1lI5S"
+              <img
+                src="static/question.svg"
+                title="0O1lI5S"
+                data-bs-toggle="tooltip"
             /></label>
             <pg-checkbox data-input="ambiguous" />
           </div>

@@ -6,12 +6,12 @@ import css from "@eslint/css";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["build/*", "package-lock.json"]),
+  globalIgnores(["src/dist/*", "package-lock.json"]),
   {
     files: ["**/*.{js,mjs,cjs}"],
     plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: { globals: globals.browser },
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {
     files: ["**/*.json"],
