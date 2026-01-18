@@ -11,11 +11,18 @@ npm install
 Run development server:
 
 ```shell
-npm run serve
+npm run start
 ```
 
 Fix lint and format errors:
 
 ```shell
 npm run format
+```
+
+Build and preview:
+
+```shell
+npm run build
+npm run preview
 ```

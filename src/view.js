@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: Copyright (c) 2025 Doug Hom
 // SPDX-License-Identifier: MIT
 
+import "./static/styles.scss";
+import * as bootstrap from "bootstrap";
+
 /**
  * Register custom HTML elements.
  *
@@ -15,6 +18,10 @@ class View {
     customElements.define("pg-password", Password);
     customElements.define("pg-length", Length);
     customElements.define("pg-span", Span);
+
+    [...document.querySelectorAll('[data-bs-toggle="tooltip"]')].map(
+      (el) => new bootstrap.Tooltip(el),
+    );
   }
 }
 
