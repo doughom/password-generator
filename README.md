@@ -1,4 +1,4 @@
-# Password Generator
+# ![Icon](/src/static/32.png)Password Generator
 
 ## Development
 
