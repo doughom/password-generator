@@ -9,7 +9,6 @@
  */
 class View {
   constructor() {
-    customElements.define("pg-charset", CharsetToggle);
     customElements.define("pg-charsetcheckbox", CharsetCheckbox);
     customElements.define("pg-copy", CopyButton);
     customElements.define("pg-password", Password);
@@ -18,9 +17,6 @@ class View {
   }
 }
 
-/**
- * Span innerHTML is set to data-value.
- */
 class Span extends HTMLElement {
   static observedAttributes = ["data-value"];
 
@@ -92,7 +88,7 @@ class BaseCheckbox extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // true/false is only used during initialization.
+    // Boolean is only used during initialization.
     if (newValue === "true") {
       this.checkbox.checked = true;
     } else if (newValue === "false") {
@@ -104,13 +100,15 @@ class BaseCheckbox extends HTMLElement {
 class CharsetCheckbox extends BaseCheckbox {
   static observedAttributes = ["data-value"];
 
-  // Prevent the user from disabling the last remaining enabled charset.
   attributeChangedCallback(name, oldValue, newValue) {
     super.attributeChangedCallback(...arguments);
+
+    // Value is boolean during initialization.
     if (!/\d+/.test(newValue)) {
       return;
     }
 
+    // Prevent the user from disabling the last remaining enabled charset.
     const numCharsetsEnabled = newValue;
     if (numCharsetsEnabled == 1 && this.checkbox.checked) {
       this.checkbox.setAttribute("disabled", true);
@@ -125,38 +123,22 @@ class CopyButton extends HTMLElement {
 
   attributeChangedCallback() {
     const button = this.firstElementChild;
+    const colorClass = "btn-success";
+
     if (this.dataset.value === "true") {
-      button.classList.add("btn-success");
+      button.classList.add(colorClass);
       button.innerText = "Copied";
     } else {
-      button.classList.remove("btn-success");
+      button.classList.remove(colorClass);
       button.innerText = "Copy";
     }
   }
 }
 
 /**
- * Prevent the user from disabling the last remaining enabled charset.
- */
-class CharsetToggle extends HTMLElement {
-  static observedAttributes = ["data-value"];
-
-  attributeChangedCallback() {
-    const input = this.firstElementChild;
-    const numCharsetsEnabled = this.dataset.value;
-
-    if (numCharsetsEnabled == 1 && input.checked) {
-      input.setAttribute("disabled", true);
-    } else {
-      input.removeAttribute("disabled");
-    }
-  }
-}
-
-/**
- * Add color to digits in password.
+ * Add color to password.
  * @param {string} password
- * @returns {string} Password with span tags around digits.
+ * @returns {string} Password with span tags around digits and symbols.
  */
 function colorPassword(password) {
   let colorized = "";
