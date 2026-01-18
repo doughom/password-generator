@@ -9,6 +9,7 @@
  */
 class View {
   constructor() {
+    customElements.define("pg-checkbox", Checkbox);
     customElements.define("pg-charsetcheckbox", CharsetCheckbox);
     customElements.define("pg-copy", CopyButton);
     customElements.define("pg-password", Password);
@@ -65,7 +66,9 @@ class Length extends HTMLElement {
   }
 }
 
-class BaseCheckbox extends HTMLElement {
+class Checkbox extends HTMLElement {
+  static observedAttributes = ["data-value"];
+
   checkbox;
 
   constructor() {
@@ -97,7 +100,7 @@ class BaseCheckbox extends HTMLElement {
   }
 }
 
-class CharsetCheckbox extends BaseCheckbox {
+class CharsetCheckbox extends Checkbox {
   static observedAttributes = ["data-value"];
 
   attributeChangedCallback(name, oldValue, newValue) {

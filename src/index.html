@@ -26,6 +26,9 @@
   <body class="min-vh-100 d-flex align-items-center">
     <main class="container-md text-center" style="max-width: 720px">
       <div class="row">
+        <img src="static/icon.svg" height="64" width="64" />
+      </div>
+      <div class="row">
         <h1>Password Generator</h1>
       </div>
       <div class="row mx-3">
@@ -49,8 +52,16 @@
       </div>
       <div class="row mx-2 my-2">
         <div class="col-6">
+          <div>
+            Entropy:
+            <pg-span data-watch="password" data-key="entropy"></pg-span> bits
+            <img
+              src="static/question.svg"
+              title="Measurement of resistance to password cracking."
+            />
+          </div>
           <label for="length" class="form-label">
-            Characters: <pg-span data-length />
+            Characters: <pg-span data-length></pg-span>
           </label>
           <pg-length data-input="length" />
         </div>
@@ -80,12 +91,21 @@
             />
           </div>
           <div class="form-check form-switch">
-            <label class="form-check-label" for="symbol">Symbols</label>
+            <label class="form-check-label" for="symbol"
+              >Symbols <img src="static/question.svg" title="Symbols: !@#$%^&*"
+            /></label>
             <pg-charsetcheckbox
               data-input="symbol"
               data-watch="lower upper digit"
               data-key="charsetsEnabled"
             />
+          </div>
+          <div class="form-check form-switch">
+            <label class="form-check-label" for="symbol"
+              >Ambiguous
+              <img src="static/question.svg" title="Ambiguous: 0O1lI5S"
+            /></label>
+            <pg-checkbox data-input="ambiguous" />
           </div>
         </div>
       </div>
