@@ -19,9 +19,13 @@ class View {
     customElements.define("pg-length", Length);
     customElements.define("pg-span", Span);
 
-    [...document.querySelectorAll('[data-bs-toggle="tooltip"]')].map(
-      (el) => new bootstrap.Tooltip(el),
-    );
+    try {
+      [...document.querySelectorAll('[data-bs-toggle="tooltip"]')].map(
+        (el) => new bootstrap.Tooltip(el),
+      );
+    } catch {
+      console.warn("Bootstrap was not loaded.");
+    }
   }
 }
 
