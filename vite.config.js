@@ -1,3 +1,5 @@
+import createPlainVersion from "./vite.plugins";
+
 const path = require("path");
 
 export default {
@@ -10,9 +12,16 @@ export default {
     },
   },
 
+  build: {
+    outDir: "../dist",
+    emptyOutDir: true,
+  },
+
   server: {
     host: true,
     port: 3000,
     hot: true,
   },
+
+  plugins: [createPlainVersion()],
 };
