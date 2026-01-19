@@ -30,11 +30,19 @@ export default function createPlainVersion() {
       text = text.replace(importPattern, "");
       writeFileSync(filePath, text);
 
-      // Fix navbar link.
+      // Navbar link, CSS, and intro.
       filePath = join(destDir, "plain.html");
       text = readFileSync(filePath, "utf-8");
       text = text.replace("plain.html", "index.html");
       text = text.replace("Plain", "Bootstrap");
+      text = text.replace(
+        "<!--plain.css-->",
+        '<link rel="stylesheet" href="static/plain.css" />',
+      );
+      text = text.replace(
+        "<!--Intro-->",
+        "<p>This version does not use third-party libraries.</p>",
+      );
       writeFileSync(filePath, text);
     },
   };
