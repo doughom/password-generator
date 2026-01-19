@@ -92,8 +92,12 @@ class Model {
       },
     };
 
-    let controllerProxy = new Proxy(this, handler);
-    return new Proxy(controllerProxy, refreshPassword);
+    let proxy = this;
+    if (handler) {
+      proxy = new Proxy(this, handler);
+    }
+
+    return new Proxy(proxy, refreshPassword);
   }
 
   /** Return the charset mask of the given password. */

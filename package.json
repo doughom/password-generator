@@ -12,14 +12,16 @@
     "prettier": "3.7.4",
     "sass": "1.97.2",
     "serve-static": "2.2.1",
-    "vite": "7.3.1"
+    "vite": "7.3.1",
+    "vitest": "4.0.17"
   },
   "scripts": {
     "build": "vite build",
     "format": "eslint --fix; prettier --write .",
     "prepare": "husky",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",

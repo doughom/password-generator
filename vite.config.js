@@ -1,8 +1,10 @@
+/// <reference types="vitest/config" />
+import { defineConfig } from "vite";
 import createPlainVersion from "./vite.plugins";
 
 const path = require("path");
 
-export default {
+export default defineConfig({
   root: path.resolve(__dirname, "src"),
   base: "/password-generator/",
 
@@ -24,4 +26,9 @@ export default {
   },
 
   plugins: [createPlainVersion()],
-};
+
+  test: {
+    root: path.resolve(__dirname),
+    setupFiles: ["test/setup.js"],
+  },
+});
