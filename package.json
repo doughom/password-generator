@@ -15,11 +15,11 @@
     "vite": "7.3.1"
   },
   "scripts": {
-    "build": "npx vite build",
-    "format": "npx eslint --fix; npx prettier --write .",
+    "build": "vite build",
+    "format": "eslint --fix; prettier --write .",
     "prepare": "husky",
-    "preview": "npx vite preview",
-    "start": "npx vite"
+    "preview": "vite preview",
+    "start": "vite"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",

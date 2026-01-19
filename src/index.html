@@ -11,97 +11,137 @@
     <link rel="apple-touch-icon" href="static/180.png" />
     <link rel="manifest" href="static/pwa-manifest.json" />
   </head>
-  <body class="min-vh-100 d-flex align-items-center">
-    <main class="container-md text-center" style="max-width: 720px">
-      <div class="row">
-        <img src="static/icon.svg" height="64" width="64" />
-      </div>
-      <div class="row">
-        <h1>Password Generator</h1>
-      </div>
-      <div class="row mx-3">
-        <div class="fs-2 font-monospace text-break">
-          <pg-password data-password>&nbsp;</pg-password>
-        </div>
-      </div>
-      <div class="row mx-2 my-2">
-        <div class="col">
-          <pg-copy data-copy>
-            <button id="copy" type="button" class="btn btn-secondary w-100">
-              Copy
-            </button>
-          </pg-copy>
-        </div>
-        <div class="col">
-          <button id="generate" type="button" class="btn btn-primary w-100">
-            Generate
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <img src="static/icon.svg" height="24" width="24" />
+          <a class="navbar-brand" href="#">Password Generator</a>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
           </button>
+
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  href="https://github.com/doughom/password-generator"
+                  target="_blank"
+                  >Source Code &UpperRightArrow;</a
+                >
+              </li>
+
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  href="https://github.com/doughom/password-generator/blob/main/LICENSE"
+                  target="_blank"
+                  >License &UpperRightArrow;</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="row mx-2 my-2">
-        <div class="col-6">
-          <div>
-            Entropy:
-            <pg-span data-watch="password" data-key="entropy"></pg-span> bits
-            <img
-              src="static/question.svg"
-              title="Measurement of resistance to password cracking."
-              data-bs-toggle="tooltip"
-            />
+      </nav>
+    </header>
+
+    <main class="min-vh-100 d-flex align-items-center">
+      <div class="container-md text-center" style="max-width: 720px">
+        <div class="row mx-3">
+          <div class="fs-2 font-monospace text-break">
+            <pg-password data-password>&nbsp;</pg-password>
           </div>
-          <label for="length" class="form-label">
-            Characters: <pg-span data-length></pg-span>
-          </label>
-          <pg-length data-input="length" />
         </div>
-        <div class="col-6">
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="lowercase">Lowercase</label>
-            <pg-charsetcheckbox
-              data-input="lower"
-              data-watch="upper digit symbol"
-              data-key="charsetsEnabled"
-            />
+        <div class="row mx-2 my-2">
+          <div class="col">
+            <pg-copy data-copy>
+              <button id="copy" type="button" class="btn btn-secondary w-100">
+                Copy
+              </button>
+            </pg-copy>
           </div>
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="uppercase">Uppercase</label>
-            <pg-charsetcheckbox
-              data-input="upper"
-              data-watch="lower digit symbol"
-              data-key="charsetsEnabled"
-            />
+          <div class="col">
+            <button id="generate" type="button" class="btn btn-primary w-100">
+              Generate
+            </button>
           </div>
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="digit">Digits</label>
-            <pg-charsetcheckbox
-              data-input="digit"
-              data-watch="lower upper symbol"
-              data-key="charsetsEnabled"
-            />
-          </div>
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="symbol"
-              >Symbols
+        </div>
+        <div class="row mx-2 my-2">
+          <div class="col-6">
+            <div>
+              Entropy:
+              <pg-span data-watch="password" data-key="entropy"></pg-span> bits
               <img
                 src="static/question.svg"
-                title="!@#$%^&*"
+                title="Measurement of resistance to password cracking."
                 data-bs-toggle="tooltip"
-            /></label>
-            <pg-charsetcheckbox
-              data-input="symbol"
-              data-watch="lower upper digit"
-              data-key="charsetsEnabled"
-            />
+              />
+            </div>
+            <label for="length" class="form-label">
+              Characters: <pg-span data-length></pg-span>
+            </label>
+            <pg-length data-input="length" />
           </div>
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="symbol"
-              >Ambiguous
-              <img
-                src="static/question.svg"
-                title="0O1lI5S"
-                data-bs-toggle="tooltip"
-            /></label>
-            <pg-checkbox data-input="ambiguous" />
+          <div class="col-6">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="lowercase">Lowercase</label>
+              <pg-charsetcheckbox
+                data-input="lower"
+                data-watch="upper digit symbol"
+                data-key="charsetsEnabled"
+              />
+            </div>
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="uppercase">Uppercase</label>
+              <pg-charsetcheckbox
+                data-input="upper"
+                data-watch="lower digit symbol"
+                data-key="charsetsEnabled"
+              />
+            </div>
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="digit">Digits</label>
+              <pg-charsetcheckbox
+                data-input="digit"
+                data-watch="lower upper symbol"
+                data-key="charsetsEnabled"
+              />
+            </div>
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="symbol"
+                >Symbols
+                <img
+                  src="static/question.svg"
+                  title="!@#$%^&*"
+                  data-bs-toggle="tooltip"
+              /></label>
+              <pg-charsetcheckbox
+                data-input="symbol"
+                data-watch="lower upper digit"
+                data-key="charsetsEnabled"
+              />
+            </div>
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="symbol"
+                >Ambiguous
+                <img
+                  src="static/question.svg"
+                  title="0O1lI5S"
+                  data-bs-toggle="tooltip"
+              /></label>
+              <pg-checkbox data-input="ambiguous" />
+            </div>
           </div>
         </div>
       </div>
