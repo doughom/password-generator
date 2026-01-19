@@ -10,7 +10,7 @@
     <link rel="icon" sizes="180x180" href="static/180.png" />
     <link rel="apple-touch-icon" href="static/180.png" />
     <link rel="manifest" href="static/pwa-manifest.json" />
-    <link rel="stylesheet" href="static/custom.css" />
+    <!--plain.css-->
   </head>
 
   <body>
@@ -18,7 +18,7 @@
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
           <img src="static/icon.svg" height="24" width="24" />
-          <a class="navbar-brand" href="#">Password Generator</a>
+          <span class="navbar-brand" href="#">Password Generator</span>
 
           <button
             class="navbar-toggler"
@@ -62,6 +62,7 @@
     </header>
 
     <main class="min-vh-100 d-flex align-items-center">
+      <!--Intro-->
       <div class="container-md text-center" style="max-width: 720px">
         <div class="row mx-3">
           <code class="fs-2 font-monospace text-break text-black">
@@ -69,14 +70,14 @@
           </code>
         </div>
         <div class="row mx-2 my-2">
-          <div class="col">
+          <div class="col-6">
             <pg-copy data-copy>
               <button id="copy" type="button" class="btn btn-secondary w-100">
                 Copy
               </button>
             </pg-copy>
           </div>
-          <div class="col">
+          <div class="col-6">
             <button id="generate" type="button" class="btn btn-primary w-100">
               Generate
             </button>
