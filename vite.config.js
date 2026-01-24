@@ -1,8 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import createPlainVersion from "./vite.plugins";
-
-const path = require("path");
+import path from "node:path";
 
 export default defineConfig({
   root: path.resolve(__dirname, "src"),
