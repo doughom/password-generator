@@ -1,3 +1,12 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:24-trixie"
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24-trixie",
+  "postCreateCommand": "npm install && husky",
+  "remoteEnv": {
+    "PATH": "${containerWorkspaceFolder}/node_modules/.bin:${containerEnv:PATH}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig"]
+    }
+  }
 }
